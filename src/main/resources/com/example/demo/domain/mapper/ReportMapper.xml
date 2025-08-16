@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.domain.mapper.ReportMapper">
+    <insert id="insertReport" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO reports (
+            start_date,
+            end_date,
+            end_client,
+            upper_client,
+            industry,
+            nearest_station,
+            project_name,
+            participation_date,
+            number_of_participants,
+            commute_hours,   
+            commute_minutes,
+            work_style,
+            position,
+            main_technology,
+            database,
+            overall_progress,
+            future_plans,
+            customer_status,
+            sales_info,
+            health_status,
+            vacation_plans,
+            consultation
+        ) VALUES (
+            #{startDate},
+            #{endDate},
+            #{customerInfo.endClient},
+            #{customerInfo.upperClient},
+            #{customerInfo.industry},
+            #{customerInfo.nearestStation},
+            #{projectInfo.projectName},
+            #{projectInfo.participationDate},
+            #{projectInfo.numberOfParticipants},
+            #{projectInfo.commuteHours},
+            #{projectInfo.commuteMinutes},
+            #{projectInfo.workStyle},
+            #{projectInfo.position},
+            #{projectInfo.mainTechnology},
+            #{projectInfo.database},
+            #{overallProgress},
+            #{futurePlans},
+            #{otherInfo.customerStatus},
+            #{otherInfo.salesInfo},
+            #{otherInfo.healthStatus},
+            #{otherInfo.vacationPlans},
+            #{consultation}
+        )
+    </insert>
+    <insert id="insertTasks">
+        INSERT INTO tasks (report_id, task_name, status, problem)
+        VALUES
+        <foreach collection="tasks" item="task" separator=",">
+            (#{reportId}, #{task.taskName}, #{task.status}, #{task.problem})
+        </foreach>
+    </insert>
+    <resultMap id="reportWithTasksResultMap" type="com.example.demo.domain.model.Report">
+        <id property="id" column="report_id" />
+        <result property="startDate" column="start_date"/>
+        <result property="endDate" column="end_date"/>
+        <result property="overallProgress" column="overall_progress" />
+        <result property="futurePlans" column="future_plans" />
+        <result property="consultation" column="consultation" />
+        <result property="createdAt" column="created_at" />
+        <association property="customerInfo" javaType="com.example.demo.domain.model.CustomerInfo">
+            <result property="endClient" column="end_client" />
+            <result property="upperClient" column="upper_client" />
+            <result property="industry" column="industry" />
+            <result property="nearestStation" column="nearest_station" />
+        </association>
+        <association property="projectInfo" javaType="com.example.demo.domain.model.ProjectInfo">
+            <result property="projectName" column="project_name" />
+            <result property="participationDate" column="participation_date" />
+            <result property="numberOfParticipants" column="number_of_participants" />
+            <result property="commuteHours" column="commute_hours"/>
+            <result property="commuteMinutes" column="commute_minutes"/>
+            <result property="workStyle" column="work_style" />
+            <result property="position" column="position" />
+            <result property="mainTechnology" column="main_technology" />
+            <result property="database" column="database" />
+        </association>
+        <association property="otherInfo" javaType="com.example.demo.domain.model.OtherInfo">
+            <result property="customerStatus" column="customer_status" />
+            <result property="salesInfo" column="sales_info" />
+            <result property="healthStatus" column="health_status" />
+            <result property="vacationPlans" column="vacation_plans" />
+        </association>
+        <collection property="tasks" ofType="com.example.demo.domain.model.Task">
+            <id property="id" column="task_id" />
+            <result property="taskName" column="task_name" />
+            <result property="status" column="status" />
+            <result property="problem" column="problem" />
+        </collection>
+    </resultMap>
+    <sql id="Base_Column_List">
+        r.id as report_id,
+        r.start_date,
+        r.end_date,
+        r.end_client,
+        r.upper_client,
+        r.industry,
+        r.nearest_station,
+        r.project_name,
+        r.participation_date,
+        r.number_of_participants,
+        r.commute_hours,
+        r.commute_minutes,
+        r.work_style,
+        r.position,
+        r.main_technology,
+        r.database,
+        r.overall_progress,
+        r.future_plans,
+        r.customer_status,
+        r.sales_info,
+        r.health_status,
+        r.vacation_plans,
+        r.consultation,
+        r.created_at
+    </sql>
+    <select id="findByIdWithTasks" resultMap="reportWithTasksResultMap">
+        SELECT
+            <include refid="Base_Column_List"/>,
+            t.id as task_id,
+            t.task_name,
+            t.status,
+            t.problem
+        FROM
+            reports r
+        LEFT JOIN
+            tasks t ON r.id = t.report_id
+        WHERE
+            r.id = #{id}
+    </select>
+    <select id="findAllWithTasks" resultMap="reportWithTasksResultMap">
+        SELECT
+            <include refid="Base_Column_List"/>,
+            t.id as task_id,
+            t.task_name,
+            t.status,
+            t.problem
+        FROM
+            reports r
+        LEFT JOIN
+            tasks t ON r.id = t.report_id
+        ORDER BY
+            r.id ASC
+    </select>
+    <update id="updateReport">
+        UPDATE reports
+        SET
+            start_date = #{startDate},
+            end_date = #{endDate},
+            end_client = #{customerInfo.endClient},
+            upper_client = #{customerInfo.upperClient},
+            industry = #{customerInfo.industry},
+            nearest_station = #{customerInfo.nearestStation},
+            project_name = #{projectInfo.projectName},
+            participation_date = #{projectInfo.participationDate},
+            number_of_participants = #{projectInfo.numberOfParticipants},
+            commute_hours = #{projectInfo.commuteHours},
+            commute_minutes = #{projectInfo.commuteMinutes},
+            work_style = #{projectInfo.workStyle},
+            position = #{projectInfo.position},
+            main_technology = #{projectInfo.mainTechnology},
+            database = #{projectInfo.database},
+            overall_progress = #{overallProgress},
+            future_plans = #{futurePlans},
+            customer_status = #{otherInfo.customerStatus},
+            sales_info = #{otherInfo.salesInfo},
+            health_status = #{otherInfo.healthStatus},
+            vacation_plans = #{otherInfo.vacationPlans},
+            consultation = #{consultation}
+        WHERE id = #{id}
+    </update>
+    <delete id="deleteTasksByReportId">
+        DELETE FROM tasks WHERE report_id = #{reportId}
+    </delete>
+    <delete id="deleteReport">
+        DELETE FROM reports WHERE id = #{id}
+    </delete>
+    <select id="findLatestReport" resultMap="reportWithTasksResultMap">
+        SELECT
+            <include refid="Base_Column_List"/>,
+            t.id as task_id,
+            t.task_name,
+            t.status,
+            t.problem
+        FROM
+            reports r
+        LEFT JOIN
+            tasks t ON r.id = t.report_id
+        ORDER BY
+            r.created_at DESC
+        LIMIT 1
+    </select>
+    <select id="findLatestReportId" resultType="java.lang.Long">
+        SELECT
+            id
+        FROM
+            reports
+        ORDER BY
+            created_at DESC
+        LIMIT 1
+    </select>
+</mapper>
