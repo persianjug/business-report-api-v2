@@ -147,7 +147,7 @@
         LEFT JOIN
             tasks t ON r.id = t.report_id
         ORDER BY
-            r.id ASC
+            r.id DESC
     </select>
     <update id="updateReport">
         UPDATE reports
