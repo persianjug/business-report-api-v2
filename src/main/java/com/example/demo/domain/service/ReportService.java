@@ -106,4 +106,23 @@ public class ReportService {
   public boolean hasReports() {
     return reportMapper.findLatestReportId() != null;
   }
+
+  /**
+   * 登録済みの業務報告書を取得します。
+   * 
+   * @return 登録済みのReportオブジェクト
+   */
+  public List<Report> getPublishedReports() {
+    return reportMapper.findByStatus("published");
+  }
+
+  /**
+   * 下書きの業務報告書を取得します。
+   * 
+   * @return 下書きのReportオブジェクト
+   */
+  public List<Report> getDraftReports() {
+    return reportMapper.findByStatus("draft");
+  }
+
 }

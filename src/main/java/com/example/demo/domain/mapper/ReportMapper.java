@@ -24,17 +24,9 @@ public interface ReportMapper {
 
   int deleteReport(Long id);
 
-  /**
-   * 最新の業務報告書を1件取得します。
-   * 
-   * @return 最新のReportオブジェクト
-   */
   Report findLatestReport();
 
-  /**
-   * 最新の業務報告書のIDを取得します。
-   * 
-   * @return 最新の報告書のID、存在しない場合はnull
-   */
   Long findLatestReportId();
+
+  List<Report> findByStatus(String status);
 }

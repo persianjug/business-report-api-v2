@@ -20,4 +20,5 @@ public class Report {
   private String consultation; // 相談
   private LocalDateTime createdAt; // 作成日
   private LocalDateTime updatedAt; // 更新日
+  private String status; // ステータス（公開データか下書きデータか）
 }

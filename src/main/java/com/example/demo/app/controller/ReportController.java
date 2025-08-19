@@ -2,6 +2,7 @@ package com.example.demo.app.controller;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -38,6 +39,11 @@ public class ReportController {
    */
   @PostMapping
   public ResponseEntity<Report> createReport(@RequestBody Report report) {
+    // デフォルトでstatusが設定されていない場合は"published"(公開済)と仮定
+    if (report.getStatus() == null || report.getStatus().isEmpty()) {
+      report.setStatus("published");
+    }
+
     Report createdReport = reportService.createReport(report);
     return new ResponseEntity<>(createdReport, HttpStatus.CREATED);
   }
@@ -49,7 +55,8 @@ public class ReportController {
    */
   @GetMapping
   public ResponseEntity<List<Report>> getAllReports() {
-    List<Report> reports = reportService.getAllReports();
+    // List<Report> reports = reportService.getAllReports();
+    List<Report> reports = reportService.getPublishedReports();
     return new ResponseEntity<>(reports, HttpStatus.OK);
   }
 
@@ -102,6 +109,11 @@ public class ReportController {
   @PutMapping("/{id}")
   public ResponseEntity<Report> updateReport(@PathVariable("id") Long id, @RequestBody Report report) {
     report.setId(id);
+    // デフォルトでstatusが設定されていない場合は"published"と仮定
+    if (report.getStatus() == null || report.getStatus().isEmpty()) {
+      report.setStatus("published");
+    }
+
     Report updatedReport = reportService.updateReport(report);
     return new ResponseEntity<>(updatedReport, HttpStatus.OK);
   }
@@ -142,4 +154,15 @@ public class ReportController {
   public ResponseEntity<Boolean> hasReports() {
     return new ResponseEntity<>(reportService.hasReports(), HttpStatus.OK);
   }
+
+  /**
+   * 下書き報告書の一覧取得
+   * @return 作成された報告書オブジェクトとHTTPステータス
+   */
+  @GetMapping("/drafts")
+  public ResponseEntity<List<Report>> getAllDrafts() {
+    List<Report> drafts = reportService.getDraftReports();
+    return new ResponseEntity<>(drafts, HttpStatus.OK);
+  }
+
 }
