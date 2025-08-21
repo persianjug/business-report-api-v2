@@ -65,6 +65,8 @@
         <result property="futurePlans" column="future_plans" />
         <result property="consultation" column="consultation" />
         <result property="createdAt" column="created_at" />
+        <result property="updatedAt" column="updated_at" />
+        <result property="status" column="status" />
         <association property="customerInfo" javaType="com.example.demo.domain.model.CustomerInfo">
             <result property="endClient" column="end_client" />
             <result property="upperClient" column="upper_client" />
@@ -119,7 +121,9 @@
         r.health_status,
         r.vacation_plans,
         r.consultation,
-        r.created_at
+        r.created_at,
+        r.updated_at,
+        r.status
     </sql>
     <select id="findByIdWithTasks" resultMap="reportWithTasksResultMap">
         SELECT

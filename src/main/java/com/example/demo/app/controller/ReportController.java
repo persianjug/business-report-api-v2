@@ -2,8 +2,6 @@ package com.example.demo.app.controller;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
-
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -56,7 +54,7 @@ public class ReportController {
   @GetMapping
   public ResponseEntity<List<Report>> getAllReports() {
     // List<Report> reports = reportService.getAllReports();
-    List<Report> reports = reportService.getPublishedReports();
+    List<Report> reports = reportService.getAllReports();
     return new ResponseEntity<>(reports, HttpStatus.OK);
   }
 
@@ -164,5 +162,16 @@ public class ReportController {
     List<Report> drafts = reportService.getDraftReports();
     return new ResponseEntity<>(drafts, HttpStatus.OK);
   }
+
+  /**
+   * 登録済み報告書の一覧取得
+   * @return 作成された報告書オブジェクトとHTTPステータス
+   */
+  @GetMapping("/published")
+  public ResponseEntity<List<Report>> getAllpublished() {
+    List<Report> published = reportService.getPublishedReports();
+    return new ResponseEntity<>(published, HttpStatus.OK);
+  }
+
 
 }
