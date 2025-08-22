@@ -95,8 +95,8 @@ public class ReportExcelService {
       for (Task task : report.getTasks()) {
         Row taskRow = sheet.createRow(rowNum++);
         createTaskCell(taskRow, 0, task.getTaskName(), taskCellStyle);
-        createTaskCell(taskRow, 1, task.getStatus(), multiLineTaskCellStyle);
-        createTaskCell(taskRow, 2, task.getProblem(), multiLineTaskCellStyle);
+        createTaskCell(taskRow, 1, task.getTaskProblem(), multiLineTaskCellStyle);
+        createTaskCell(taskRow, 2, task.getTaskProblem(), multiLineTaskCellStyle);
       }
     } else {
       createDataRow(sheet, rowNum++, "タスク", "タスクは登録されていません。", labelStyle, dataStyle);

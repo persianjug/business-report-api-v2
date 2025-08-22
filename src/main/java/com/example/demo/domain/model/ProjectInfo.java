@@ -2,9 +2,6 @@ package com.example.demo.domain.model;
 
 import java.time.LocalDate;
 
-import com.example.demo.domain.type.Position;
-import com.example.demo.domain.type.WorkStyle;
-
 import lombok.Data;
 
 @Data

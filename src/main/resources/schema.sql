@@ -23,21 +23,19 @@ CREATE TABLE
     health_status TEXT,
     vacation_plans TEXT,
     consultation TEXT,
+    status VARCHAR(20) NOT NULL DEFAULT 'draft',
     -- created_at の自動設定
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     -- updated_at の自動設定（更新時も自動）
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
   );
 
--- 下書き機能追加のため、statusを追加
-ALTER TABLE reports ADD COLUMN status VARCHAR(20) NOT NULL DEFAULT 'draft';
-
 CREATE TABLE
   IF NOT EXISTS tasks (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     report_id BIGINT,
     task_name VARCHAR(255),
-    status VARCHAR(255),
-    problem TEXT,
+    task_progress VARCHAR(255),
+    task_problem TEXT,
     FOREIGN KEY (report_id) REFERENCES reports (id)
   );

@@ -277,7 +277,7 @@ VALUES
   );
 
 INSERT INTO
-  tasks (report_id, task_name, status, problem)
+  tasks (report_id, task_name, task_progress, task_problem)
 VALUES
   (
     1,
