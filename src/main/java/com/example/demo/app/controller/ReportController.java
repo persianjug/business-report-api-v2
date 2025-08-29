@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.domain.model.PaginatedReports;
 import com.example.demo.domain.model.Report;
 import com.example.demo.domain.service.ReportExcelService;
 import com.example.demo.domain.service.ReportService;
@@ -51,7 +53,7 @@ public class ReportController {
    * 
    * @return 業務報告書のリストとHTTPステータス
    */
-  @GetMapping
+  // @GetMapping
   public ResponseEntity<List<Report>> getAllReports() {
     // List<Report> reports = reportService.getAllReports();
     List<Report> reports = reportService.getAllReports();
@@ -155,9 +157,10 @@ public class ReportController {
 
   /**
    * 下書き報告書の一覧取得
+   * 
    * @return 作成された報告書オブジェクトとHTTPステータス
    */
-  @GetMapping("/drafts")
+  // @GetMapping("/drafts")
   public ResponseEntity<List<Report>> getAllDrafts() {
     List<Report> drafts = reportService.getDraftReports();
     return new ResponseEntity<>(drafts, HttpStatus.OK);
@@ -165,13 +168,57 @@ public class ReportController {
 
   /**
    * 登録済み報告書の一覧取得
+   * 
    * @return 作成された報告書オブジェクトとHTTPステータス
    */
-  @GetMapping("/published")
+  // @GetMapping("/published")
   public ResponseEntity<List<Report>> getAllpublished() {
     List<Report> published = reportService.getPublishedReports();
     return new ResponseEntity<>(published, HttpStatus.OK);
   }
 
+  /**
+   * 全ての業務報告書をページングで取得します。
+   * 
+   * @param limit  1ページあたりの件数
+   * @param offset 取得開始位置
+   * @return 業務報告書と全件数
+   */
+  @GetMapping
+  public ResponseEntity<PaginatedReports> getAllReportsPaginate(
+      @RequestParam(value = "limit", defaultValue = "10") int limit,
+      @RequestParam(value = "offset", defaultValue = "0") int offset) {
+    PaginatedReports paginatedReports = reportService.getPaginatedReports("all", limit, offset);
+    return new ResponseEntity<>(paginatedReports, HttpStatus.OK);
+  }
 
+  /**
+   * 下書き報告書の一覧取得 (ページング対応)
+   * 
+   * @param limit  1ページあたりの件数
+   * @param offset 取得開始位置
+   * @return 下書き報告書と全件数
+   */
+  @GetMapping("/drafts")
+  public ResponseEntity<PaginatedReports> getAllDraftsPaginate(
+      @RequestParam(value = "limit", defaultValue = "10") int limit,
+      @RequestParam(value = "offset", defaultValue = "0") int offset) {
+    PaginatedReports paginatedReports = reportService.getPaginatedReports("draft", limit, offset);
+    return new ResponseEntity<>(paginatedReports, HttpStatus.OK);
+  }
+
+  /**
+   * 登録済み報告書の一覧取得 (ページング対応)
+   * 
+   * @param limit  1ページあたりの件数
+   * @param offset 取得開始位置
+   * @return 登録済み報告書と全件数
+   */
+  @GetMapping("/published")
+  public ResponseEntity<PaginatedReports> getAllPublishedPaginate(
+      @RequestParam(value = "limit", defaultValue = "10") int limit,
+      @RequestParam(value = "offset", defaultValue = "0") int offset) {
+    PaginatedReports paginatedReports = reportService.getPaginatedReports("published", limit, offset);
+    return new ResponseEntity<>(paginatedReports, HttpStatus.OK);
+  }
 }

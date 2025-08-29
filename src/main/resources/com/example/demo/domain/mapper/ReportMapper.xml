@@ -220,4 +220,80 @@
         ORDER BY
             r.id DESC
     </select>
+
+    <!-- <select id="findReportsWithTasksAndPagination" resultMap="reportWithTasksResultMap">
+        SELECT
+            <include refid="Base_Report_Column_List"/>,
+            <include refid="Base_Task_Column_List"/>
+        FROM
+            reports r
+        LEFT JOIN
+            tasks t ON r.id = t.report_id
+        ORDER BY
+            r.id DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select> -->
+
+    <!-- <select id="findReportsByStatusWithPagination" resultMap="reportWithTasksResultMap">
+        SELECT
+            <include refid="Base_Report_Column_List"/>,
+            <include refid="Base_Task_Column_List"/>
+        FROM
+            reports r
+        LEFT JOIN
+            tasks t ON r.id = t.report_id
+        WHERE
+            r.status = #{status}
+        ORDER BY
+            r.id DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select> -->
+
+    <select id="findReportsWithTasksAndPagination" resultMap="reportWithTasksResultMap">
+        SELECT
+            <include refid="Base_Report_Column_List"/>,
+            <include refid="Base_Task_Column_List"/>
+        FROM
+            reports r
+        LEFT JOIN
+            tasks t ON r.id = t.report_id
+        WHERE
+            r.id IN (
+                SELECT id
+                FROM reports
+                ORDER BY id DESC
+                LIMIT #{limit} OFFSET #{offset}
+            )
+        ORDER BY
+            r.id DESC
+    </select>
+
+    <select id="findReportsByStatusWithPagination" resultMap="reportWithTasksResultMap">
+        SELECT
+            <include refid="Base_Report_Column_List"/>,
+            <include refid="Base_Task_Column_List"/>
+        FROM
+            reports r
+        LEFT JOIN
+            tasks t ON r.id = t.report_id
+        WHERE
+            r.id IN (
+                SELECT id
+                FROM reports
+                WHERE status = #{status}
+                ORDER BY id DESC
+                LIMIT #{limit} OFFSET #{offset}
+            )
+        ORDER BY
+            r.id DESC
+    </select>
+
+    <select id="countAllReports" resultType="int">
+        SELECT COUNT(DISTINCT id) FROM reports
+    </select>
+
+    <select id="countReportsByStatus" resultType="int">
+        SELECT COUNT(DISTINCT id) FROM reports WHERE status = #{status}
+    </select>
+
 </mapper>

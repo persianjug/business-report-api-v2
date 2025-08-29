@@ -29,4 +29,27 @@ public interface ReportMapper {
   Long findLatestReportId();
 
   List<Report> findByStatus(String status);
+
+  /**
+   * 全ての業務報告書をページングで取得します。
+   */
+  List<Report> findReportsWithTasksAndPagination(
+      @Param("limit") int limit, @Param("offset") int offset);
+
+  /**
+   * ステータスを指定して業務報告書をページングで取得します。
+   */
+  List<Report> findReportsByStatusWithPagination(
+      @Param("status") String status, @Param("limit") int limit, @Param("offset") int offset);
+
+  /**
+   * 全ての業務報告書の件数を取得します。
+   */
+  int countAllReports();
+
+  /**
+   * ステータスを指定して業務報告書の件数を取得します。
+   */
+  int countReportsByStatus(@Param("status") String status);
+
 }

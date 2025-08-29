@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.domain.mapper.ReportMapper;
+import com.example.demo.domain.model.PaginatedReports;
 import com.example.demo.domain.model.Report;
 
 import lombok.RequiredArgsConstructor;
@@ -123,6 +124,30 @@ public class ReportService {
    */
   public List<Report> getDraftReports() {
     return reportMapper.findByStatus("draft");
+  }
+
+  /**
+   * 業務報告書をステータスとページング情報に基づいて取得します。
+   * 
+   * @param status 報告書のステータス
+   * @param limit  1ページあたりの件数
+   * @param offset 取得開始位置
+   * @return 報告書と全件数を含むオブジェクト
+   */
+  public PaginatedReports getPaginatedReports(String status, int limit, int offset) {
+    List<Report> reports;
+    int totalCount;
+
+    if ("all".equals(status)) {
+      reports = reportMapper.findReportsWithTasksAndPagination(limit, offset);
+      totalCount = reportMapper.countAllReports();
+    } else {
+      reports = reportMapper.findReportsByStatusWithPagination(status, limit, offset);
+      totalCount = reportMapper.countReportsByStatus(status);
+    }
+    // System.out.println("reports" + reports);
+
+    return new PaginatedReports(reports, totalCount);
   }
 
 }
