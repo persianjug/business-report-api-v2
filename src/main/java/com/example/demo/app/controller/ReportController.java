@@ -111,7 +111,7 @@ public class ReportController {
     report.setId(id);
     // デフォルトでstatusが設定されていない場合は"published"と仮定
     if (report.getStatus() == null || report.getStatus().isEmpty()) {
-      // report.setStatus("published");
+      report.setStatus("published");
     }
 
     Report updatedReport = reportService.updateReport(report);

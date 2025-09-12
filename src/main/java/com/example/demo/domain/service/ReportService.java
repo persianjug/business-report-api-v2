@@ -64,9 +64,7 @@ public class ReportService {
   @Transactional
   public Report updateReport(Report report) {
     // 報告書本体を更新
-    System.out.println("report: " + report);
-    int updatedRows = reportMapper.updateReport(report);
-    System.out.println("Updated rows: " + updatedRows);
+    reportMapper.updateReport(report);
     // 既存のタスクをすべて削除
     reportMapper.deleteTasksByReportId(report.getId());
 
