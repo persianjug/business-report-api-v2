@@ -24,7 +24,8 @@
             sales_info,
             health_status,
             vacation_plans,
-            consultation
+            consultation,
+            status
         ) VALUES (
             #{startDate},
             #{endDate},
@@ -47,7 +48,8 @@
             #{otherInfo.salesInfo},
             #{otherInfo.healthStatus},
             #{otherInfo.vacationPlans},
-            #{consultation}
+            #{consultation},
+            #{status}
         )
     </insert>
     <insert id="insertTasks">
@@ -177,7 +179,8 @@
             sales_info = #{otherInfo.salesInfo},
             health_status = #{otherInfo.healthStatus},
             vacation_plans = #{otherInfo.vacationPlans},
-            consultation = #{consultation}
+            consultation = #{consultation},
+            status = #{status}
         WHERE id = #{id}
     </update>
     <delete id="deleteTasksByReportId">
