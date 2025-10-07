@@ -43,7 +43,7 @@ CREATE TABLE
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     report_id BIGINT,
     task_name VARCHAR(255),
-    task_progress VARCHAR(255),
+    task_progress TEXT,
     task_problem TEXT,
     FOREIGN KEY (report_id) REFERENCES reports (id)
   );

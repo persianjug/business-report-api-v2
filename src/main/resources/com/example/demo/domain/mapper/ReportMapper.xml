@@ -135,8 +135,8 @@
     </sql>
     <select id="findByIdWithTasks" resultMap="reportWithTasksResultMap">
         SELECT
-            <include refid="Base_Report_Column_List"/>,
-            <include refid="Base_Task_Column_List"/>
+        <include refid="Base_Report_Column_List"/>,
+        <include refid="Base_Task_Column_List"/>
         FROM
             reports r
         LEFT JOIN
@@ -146,8 +146,8 @@
     </select>
     <select id="findAllWithTasks" resultMap="reportWithTasksResultMap">
         SELECT
-            <include refid="Base_Report_Column_List"/>,
-            <include refid="Base_Task_Column_List"/>
+        <include refid="Base_Report_Column_List"/>,
+        <include refid="Base_Task_Column_List"/>
         FROM
             reports r
         LEFT JOIN
@@ -197,9 +197,16 @@
             reports r
         LEFT JOIN
             tasks t ON r.id = t.report_id
+        WHERE
+            r.id = (
+                -- ここで最新のreport_idを特定する
+                SELECT id
+                FROM reports
+                ORDER BY created_at DESC
+                LIMIT 1
+            )
         ORDER BY
-            r.created_at DESC
-        LIMIT 1
+            t.id ASC -- タスクの表示順序を維持するために追加
     </select>
     <select id="findLatestReportId" resultType="java.lang.Long">
         SELECT
@@ -212,8 +219,8 @@
     </select>
     <select id="findByStatus" resultMap="reportWithTasksResultMap">
         SELECT
-            <include refid="Base_Report_Column_List"/>,
-            <include refid="Base_Task_Column_List"/>
+        <include refid="Base_Report_Column_List"/>,
+        <include refid="Base_Task_Column_List"/>
         FROM
             reports r
         LEFT JOIN
@@ -223,7 +230,6 @@
         ORDER BY
             r.id DESC
     </select>
-
     <!-- <select id="findReportsWithTasksAndPagination" resultMap="reportWithTasksResultMap">
         SELECT
             <include refid="Base_Report_Column_List"/>,
@@ -236,7 +242,6 @@
             r.id DESC
         LIMIT #{limit} OFFSET #{offset}
     </select> -->
-
     <!-- <select id="findReportsByStatusWithPagination" resultMap="reportWithTasksResultMap">
         SELECT
             <include refid="Base_Report_Column_List"/>,
@@ -251,11 +256,10 @@
             r.id DESC
         LIMIT #{limit} OFFSET #{offset}
     </select> -->
-
     <select id="findReportsWithTasksAndPagination" resultMap="reportWithTasksResultMap">
         SELECT
-            <include refid="Base_Report_Column_List"/>,
-            <include refid="Base_Task_Column_List"/>
+        <include refid="Base_Report_Column_List"/>,
+        <include refid="Base_Task_Column_List"/>
         FROM
             reports r
         LEFT JOIN
@@ -270,11 +274,10 @@
         ORDER BY
             r.id DESC
     </select>
-
     <select id="findReportsByStatusWithPagination" resultMap="reportWithTasksResultMap">
         SELECT
-            <include refid="Base_Report_Column_List"/>,
-            <include refid="Base_Task_Column_List"/>
+        <include refid="Base_Report_Column_List"/>,
+        <include refid="Base_Task_Column_List"/>
         FROM
             reports r
         LEFT JOIN
@@ -290,13 +293,10 @@
         ORDER BY
             r.id DESC
     </select>
-
     <select id="countAllReports" resultType="int">
         SELECT COUNT(DISTINCT id) FROM reports
     </select>
-
     <select id="countReportsByStatus" resultType="int">
         SELECT COUNT(DISTINCT id) FROM reports WHERE status = #{status}
     </select>
-
 </mapper>
