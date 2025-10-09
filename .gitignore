@@ -39,6 +39,7 @@ out/
 ## application.properties ###
 application.properties
 application.yaml
+application.yml
 
 # H2
 *.db
