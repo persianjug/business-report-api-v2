@@ -37,9 +37,11 @@ out/
 .vscode/
 
 ## application.properties ###
-application.properties
-application.yaml
-application.yml
+# application.properties
+# application.yaml
+# application.yml
+# application*.yml
+# application*.properties
 
 # H2
 *.db
